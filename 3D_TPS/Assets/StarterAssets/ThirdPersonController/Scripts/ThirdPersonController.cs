@@ -94,6 +94,8 @@ namespace StarterAssets
 
         // animation IDs
         private int _animIDSpeed;
+        private int _animIDX;
+        private int _animIDY;
         private int _animIDGrounded;
         private int _animIDJump;
         private int _animIDFreeFall;
@@ -171,6 +173,8 @@ namespace StarterAssets
         private void AssignAnimationIDs()
         {
             _animIDSpeed = Animator.StringToHash("Speed");
+            _animIDX = Animator.StringToHash("X");
+            _animIDY = Animator.StringToHash("Y");
             _animIDGrounded = Animator.StringToHash("Grounded");
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
@@ -280,6 +284,8 @@ namespace StarterAssets
             if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
+                _animator.SetFloat(_animIDX, _input.move.x);
+                _animator.SetFloat(_animIDY, _input.move.y);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }

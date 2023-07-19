@@ -17,14 +17,18 @@ public class TPSController : MonoBehaviour
     [SerializeField] private float aimSensitivity;
     [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField] private Transform debugTransform;
+    [SerializeField] private Transform bulletPrefab;
+    [SerializeField] private Transform spawnBulletPosition;
 
     private ThirdPersonController thirdPersonController;
     private StarterAssetsInputs starterAssetsInputs;
+    private Animator animator;
 
     private void Awake()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
         starterAssetsInputs = GetComponent<StarterAssetsInputs>();
+        animator = GetComponent<Animator>();
     }
     private void Update()
     {
@@ -40,13 +44,15 @@ public class TPSController : MonoBehaviour
             mouseWorldPosition = raycastHit.point;
         }
         // aim키를 입력받으면
-        if (starterAssetsInputs.aim)
+        if (starterAssetsInputs.aim && !starterAssetsInputs.sprint)
         {
             aimVirtualCamera.gameObject.SetActive(true);
             // 조준 마우스감도 설정
             thirdPersonController.SetSensitivity(aimSensitivity);
             // 조준하면 캐릭터 회전안함
             thirdPersonController.SetRotateOnMove(false);
+            animator.SetBool("Aiming", true);
+            //animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1),1f, Time.deltaTime * 10f));
 
             Vector3 worldAimTarget = mouseWorldPosition;
             worldAimTarget.y = transform.position.y;
@@ -59,8 +65,16 @@ public class TPSController : MonoBehaviour
             aimVirtualCamera.gameObject.SetActive(false);
             thirdPersonController.SetSensitivity(normalSensitivity);
             thirdPersonController.SetRotateOnMove(true);
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
+            animator.SetBool("Aiming", false);
+
         }
 
-
+        if (starterAssetsInputs.shoot)
+        {
+            Vector3 aimDir = (mouseWorldPosition - spawnBulletPosition.position).normalized;
+            Instantiate(bulletPrefab, spawnBulletPosition.position, Quaternion.LookRotation(aimDir, Vector3.left));
+            starterAssetsInputs.shoot = false;
+        }
     }
 }
