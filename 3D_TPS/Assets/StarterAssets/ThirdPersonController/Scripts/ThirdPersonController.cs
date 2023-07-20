@@ -160,7 +160,7 @@ namespace StarterAssets
         {
             _hasAnimator = TryGetComponent(out _animator);
 
-            JumpAndGravity();
+            //JumpAndGravity();
             GroundedCheck();
             Move();
         }
@@ -267,10 +267,10 @@ namespace StarterAssets
                     RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
-                if (_rotateOnMove)
-                {
-                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-                }
+                //if (_rotateOnMove)
+                //{
+                //    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                //}
             }
 
 
@@ -289,7 +289,8 @@ namespace StarterAssets
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }
-
+        // Jump
+        /*
         private void JumpAndGravity()
         {
             if (Grounded)
@@ -358,7 +359,7 @@ namespace StarterAssets
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
         }
-
+        */
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {
             if (lfAngle < -360f) lfAngle += 360f;
